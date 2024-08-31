@@ -6,7 +6,8 @@ const session=require('express-session')
 const passportMongoose=require("passport-local-mongoose");
 var LocalStrategy = require('passport-local').Strategy
 const router=express();
-const cors=require('cors')
+const cors=require('cors');
+const MongoStore = require('connect-mongo');
 const dotenv = require('dotenv').config()
 mongoose.connect("mongodb+srv://"+process.env.MYDBUSER+":"+process.env.MYDBPASS+"@myatlasclusteredu.3ebfqvk.mongodb.net/blogDB-v2");
 
@@ -21,6 +22,11 @@ router.use(session({
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://"+process.env.MYDBUSER+":"+process.env.MYDBPASS+"@myatlasclusteredu.3ebfqvk.mongodb.net/blogDB-v2", // MongoDB connection string
+        collectionName:"sessions",
+        ttl: 14 * 24 * 60 * 60 // Time-to-live for sessions in seconds (default 14 days)
+    }),
 }));
 router.use(passport.initialize());
 router.use(passport.session());
