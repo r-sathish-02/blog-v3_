@@ -60,7 +60,9 @@ router.get("/current_user",(req,res)=>{
 })
 
 router.post("/login",passport.authenticate("local"),(req,res)=>{
-    res.status(200).json({user:req.user})
+    console.log(req.session.user);
+    res.cookie('user','1',{maxAge:90000})
+    res.status(200).json({user:req.user});
 })
 
 router.post("/register", (req, res) => {
@@ -97,6 +99,7 @@ router.post("/compose",(req,res)=>{
     .catch((error) => res.status(500).send("Failed to save text"));
 })
 router.get("/logout", (req, res, next) => {
+    console.log(req.session.user);
     req.logout(err => {
         if (err) return next(err);
         
