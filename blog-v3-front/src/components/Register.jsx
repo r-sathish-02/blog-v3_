@@ -19,7 +19,7 @@ function Register({ url,user, setUser }) {
                 navigate("/");
             })
             .catch(error => {
-                setError(error.response?.data?.error || "Registration Failed");
+                setError(error.response.data.message);
             });
     }
 

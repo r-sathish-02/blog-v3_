@@ -19,7 +19,7 @@ function App() {
         axios.get(baseURL + '/current_user', { withCredentials: true })
             .then(response => {
                 setUser(response.data.user);
-                setLoading(false); // Set loading to false after user is fetched
+                setLoading(false); 
             })
             .catch(() => setLoading(false)); 
     }, []); 
@@ -30,7 +30,7 @@ function App() {
 
     return (
         <div>
-            <Navbar user={user} url={baseURL} />
+            <Navbar user={user} url={baseURL} setUser={setUser} />
             <Router>
                 <Routes>
                     <Route path='/' element={<Home url={baseURL} user={user} />}></Route>

@@ -9,7 +9,7 @@ function Compose({user,url}){
     const author=user.name;
     function handleSubmit(e){
         e.preventDefault();
-        axios.post(url+'/compose',{title,content,author})
+        axios.post(url+'/compose',{title,content,author},{withCredentials:true})
         .then(response=>{
             alert(response.data);
             navigate("/");

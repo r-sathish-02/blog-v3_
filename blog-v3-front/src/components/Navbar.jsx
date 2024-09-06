@@ -1,11 +1,12 @@
 import React from "react";
 import './css/navbar.css';
 import axios from "axios";
-function Navbar({ url, user }) {
+function Navbar({ url, user,setUser }) {
     function handleLogout() {
         axios.get(url + '/logout', { withCredentials: true })
         .then(response => {
             alert("Logged out successfully");
+            setUser(null)
             window.location.href = '/'; // Redirect to the login page
         })
         .catch(error => {
