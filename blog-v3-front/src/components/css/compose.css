@@ -22,3 +22,17 @@ label{
 .compose-form button{
     width: 10vw;
 }
+@media screen and (max-width:576px) {
+    .compose-form {
+        width: 80vw;
+    }
+    .compose-form input{
+        width: 70vw;
+    }
+    .compose-form textarea{
+        width:70vw ;
+    }
+    .compose-form button{
+        width: 40vw;
+    }
+}

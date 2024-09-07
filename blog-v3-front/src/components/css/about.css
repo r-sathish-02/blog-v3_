@@ -11,3 +11,8 @@ p{
 .content-box{
     margin: 10vh 2vw;
 }
+@media screen and (max-width:576px) {
+    .content-box{
+        margin: 5vh 7vw;
+    }
+}
