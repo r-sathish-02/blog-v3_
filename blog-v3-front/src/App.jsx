@@ -19,29 +19,31 @@ function App() {
         axios.get(baseURL + '/current_user', { withCredentials: true })
             .then(response => {
                 setUser(response.data.user);
+                console.log(user);
+                
                 setLoading(false); 
             })
             .catch(() => setLoading(false)); 
-    }, []); 
+    },[]); 
 
     if (loading) {
         return <div className="spinner-load"><Spinner></Spinner></div>; 
     }
 
     return (
-        <div>
-            <Navbar user={user} url={baseURL} setUser={setUser} />
-            <Router>
+        <Router>
+            <div>
+                <Navbar user={user} url={baseURL} setUser={setUser} />
                 <Routes>
-                    <Route path='/' element={<Home url={baseURL} user={user} />}></Route>
-                    <Route path='/about' element={<About />}></Route>
-                    <Route path='/contact' element={<Contact />}></Route>
-                    <Route path='/login' element={user? <Navigate to="/"/> :<Login url={baseURL} user={user} setUser={setUser} />}></Route>
-                    <Route path='/register' element={user? <Navigate to="/"/> :<Register url={baseURL} user={user} setUser={setUser} />}></Route>
-                    <Route path='/compose' element={user ? <Compose user={user} url={baseURL} /> : <Navigate to="/login" />}></Route>
+                    <Route path='/' element={<Home url={baseURL} user={user} />} />
+                    <Route path='/about' element={<About />} />
+                    <Route path='/contact' element={<Contact />} />
+                    <Route path='/login' element={user ? <Navigate to="/" /> : <Login url={baseURL} user={user} setUser={setUser} />} />
+                    <Route path='/register' element={user ? <Navigate to="/" /> : <Register url={baseURL} user={user} setUser={setUser} />} />
+                    <Route path='/compose' element={user ? <Compose user={user} url={baseURL} /> : <Navigate to="/login" />} />
                 </Routes>
-            </Router>
-        </div>
+            </div>
+        </Router>
     )
 }
 
