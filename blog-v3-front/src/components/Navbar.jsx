@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import './css/navbar.css';
 import axios from "axios";
 
 function Navbar({ url, user, setUser }) {
     const [isNavOpen, setIsNavOpen] = useState(false);
-
+    const navigate=useNavigate();
     function handleLogout() {
         axios.get(url + '/logout', { withCredentials: true })
             .then(response => {
                 alert("Logged out successfully");
                 setUser(null);
-                window.location.href = '/'; 
+                setIsNavOpen(false);
+                navigate('/');
             })
             .catch(error => {
                 console.error("Error during logout", error);
