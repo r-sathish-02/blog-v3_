@@ -39,6 +39,7 @@ A full-stack **Blogging Application** built with the **MERN stack** (MongoDB, Ex
 
 
 ## 🗂️ Folder Structure
+```
 /backend
     /config         # Configuration files (e.g., environment, middleware, etc.)
     /controllers    # Backend logic and route handlers
@@ -65,7 +66,7 @@ A full-stack **Blogging Application** built with the **MERN stack** (MongoDB, Ex
 
 README.md             # You're here!
 
-
+```
 
 
 ## 🌐 Backend API Endpoints
