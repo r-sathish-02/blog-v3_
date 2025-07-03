@@ -39,29 +39,28 @@ A full-stack **Blogging Application** built with the **MERN stack** (MongoDB, Ex
 
 
 ## 🗂️ Folder Structure
-
 project-root/
 │
-├── blog-v3-back/ # Backend
-│ ├── index.js # Express server
-│ ├── .env # Environment variables
-│ ├── package.json
+├── blog-v3-back/               # 🔙 Backend (Node.js + Express)
+│   ├── index.js                # Main Express server file
+│   ├── .env                    # Environment variables
+│   ├── package.json            # Backend dependencies & scripts
 │
-├── blog-v3-front/ # Frontend
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── About.jsx
-│ │ │ ├── Contact.jsx
-│ │ │ ├── Compose.jsx
-│ │ │ ├── Home.jsx
-│ │ │ ├── Login.jsx
-│ │ │ ├── Register.jsx
-│ │ │ ├── Spinner.jsx
-│ │ │ └── Navbar.jsx
-│ │ ├── App.jsx
-│ │ └── index.js
-│ ├── public/
-│ ├── package.json
+├── blog-v3-front/              # 🎨 Frontend (React)
+│   ├── public/                 # Static assets (HTML, icons, etc.)
+│   ├── src/                    # Source code
+│   │   ├── components/         # Reusable React components
+│   │   │   ├── About.jsx
+│   │   │   ├── Contact.jsx
+│   │   │   ├── Compose.jsx
+│   │   │   ├── Home.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── Spinner.jsx
+│   │   │   └── Navbar.jsx
+│   │   ├── App.jsx             # Root React component
+│   │   └── index.js            # React DOM rendering entry point
+│   ├── package.json            # Frontend dependencies & scripts
 
 
 
