@@ -1,10 +1,10 @@
-![image](https://github.com/user-attachments/assets/9a6f09f0-b72a-413c-8ab9-2f62adbec320)# 📝 Blog App
+# 📝 Blog App
 
 A full-stack **Blogging Application** built with the **MERN stack** (MongoDB, Express.js, React.js, Node.js) featuring user authentication, session management, and blog post creation. This version uses session-based authentication with Passport.js and supports a smooth UX for writing and viewing blog posts.
 
 ---
-## Live Preview
-https://joshuasblog.vercel.app/
+## Live Preview:
+[Link](https://joshuasblog.vercel.app/)
 ---
 
 ## 🚀 Features
