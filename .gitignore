@@ -1,0 +1,16 @@
+# root
+.DS_Store
+.env
+*.env
+
+# backend
+/blog-v3-back/node_modules/
+/blog-v3-back/.env
+/blog-v3-back/.env.*
+
+# frontend
+/blog-v3-front/node_modules/
+/blog-v3-front/.env
+/blog-v3-front/.env.*
+/blog-v3-front/build/
+/blog-v3-front/.vercel

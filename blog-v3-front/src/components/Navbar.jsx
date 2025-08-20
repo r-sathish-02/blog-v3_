@@ -26,7 +26,7 @@ function Navbar({ url, user, setUser }) {
     return (
         <div>
             <nav>
-                <p className="headername">Joshua's Public Blog</p>
+                <p className="headername">Sathish's Public Blog</p>
                 <div className="toggle-button" onClick={toggleNavbar}>
                     <div></div>
                     <div></div>
