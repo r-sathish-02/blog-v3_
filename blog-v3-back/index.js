@@ -1,3 +1,4 @@
+// index.js (deploy-ready)
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -7,26 +8,35 @@ const passportMongoose = require('passport-local-mongoose');
 const LocalStrategy = require('passport-local').Strategy;
 const cors = require('cors');
 const MongoStore = require('connect-mongo');
-
 require('dotenv').config();
 
-/**
- * Build a safe Mongo URI using env vars.
- * encodeURIComponent handles special chars in the password (@, /, :, ?, &, =, #, etc.)
- * Replace the host/appName below if your Atlas cluster name/id differs.
- */
-const MONGO_URI = `mongodb+srv://${process.env.MYDBUSER}:${encodeURIComponent(process.env.MYDBPASS)}@blog-cluster.h8sbpo5.mongodb.net/blogDB-v2?retryWrites=true&w=majority&appName=Blog-cluster`;
+const PORT = process.env.PORT || 8000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 
-// Connect to MongoDB
-mongoose.connect(MONGO_URI);
+// Build Mongo URI from env or fall back to parts
+const MONGO_URI =
+  process.env.MONGODB_URI ||
+  `mongodb+srv://${encodeURIComponent(process.env.MYDBUSER)}:${encodeURIComponent(process.env.MYDBPASS)}@blog-cluster.h8sbpo5.mongodb.net/blogDB-v2?retryWrites=true&w=majority&appName=Blog-cluster`;
 
-// App
+// Connect to MongoDB with basic logging
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => {
+    console.error('MongoDB connection error:', err.message);
+    process.exitCode = 1;
+  });
+
 const app = express();
+
+// Behind proxy (Render/Heroku/etc.)
+app.set('trust proxy', 1);
 
 // CORS
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
+  origin: CLIENT_ORIGIN,
+  credentials: true
 }));
 
 // Parsers
@@ -41,9 +51,14 @@ app.use(session({
   store: MongoStore.create({
     mongoUrl: MONGO_URI,
     collectionName: 'sessions',
-    ttl: 14 * 24 * 60 * 60, // 14 days
+    ttl: 14 * 24 * 60 * 60
   }),
-  cookie: { secure: false }, // dev over http
+  cookie: {
+    httpOnly: true,
+    sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 }));
 
 // Passport
@@ -55,13 +70,13 @@ const userSchema = new mongoose.Schema({
   name: String,
   username: String,
   password: String,
-  mobile: Number,
+  mobile: Number
 });
 
 const textSchema = new mongoose.Schema({
   title: String,
   content: String,
-  author: String,
+  author: String
 });
 
 // Plugins / Models
@@ -75,6 +90,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Routes
+app.get('/health', (_req, res) => res.json({ ok: true }));
+
 app.get('/current_user', (req, res) => {
   if (req.isAuthenticated && req.isAuthenticated()) {
     return res.json({ user: req.user });
@@ -90,7 +107,7 @@ app.post('/register', (req, res, next) => {
   const newUser = new User({
     name: req.body.name,
     username: req.body.username,
-    mobile: req.body.mobile,
+    mobile: req.body.mobile
   });
 
   User.register(newUser, req.body.password, (err, user) => {
@@ -102,9 +119,13 @@ app.post('/register', (req, res, next) => {
   });
 });
 
-app.get('/posts', async (req, res) => {
-  const response = await Text.find();
-  res.json(response);
+app.get('/posts', async (_req, res) => {
+  try {
+    const response = await Text.find();
+    res.json(response);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
 });
 
 app.post('/compose', async (req, res) => {
@@ -112,7 +133,7 @@ app.post('/compose', async (req, res) => {
     const newText = new Text({
       title: req.body.title,
       content: req.body.content,
-      author: req.body.author,
+      author: req.body.author
     });
     await newText.save();
     res.status(200).send('Text Saved Successfully');
@@ -131,7 +152,6 @@ app.get('/logout', (req, res, next) => {
   });
 });
 
-// Start server
-app.listen(8000, () => {
-  console.log('Server live at 8000');
+app.listen(PORT, () => {
+  console.log(`Server live at ${PORT}`);
 });
