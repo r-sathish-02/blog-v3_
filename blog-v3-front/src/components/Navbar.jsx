@@ -1,57 +1,57 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import './css/navbar.css';
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import "./css/navbar.css";
+import api from "../api";
 
-function Navbar({ url, user, setUser }) {
-    const [isNavOpen, setIsNavOpen] = useState(false);
-    const navigate=useNavigate();
-    function handleLogout() {
-        axios.get(url + '/logout', { withCredentials: true })
-            .then(response => {
-                alert("Logged out successfully");
-                setUser(null);
-                setIsNavOpen(false);
-                navigate('/');
-            })
-            .catch(error => {
-                console.error("Error during logout", error);
-            });
+function Navbar({ user, setUser }) {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    try {
+      await api.get("/logout");
+      alert("Logged out successfully");
+      setUser(null);
+      setIsNavOpen(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout", error);
     }
+  }
 
-    function toggleNavbar() {
-        setIsNavOpen(!isNavOpen);
-    }
+  function toggleNavbar() {
+    setIsNavOpen(!isNavOpen);
+  }
 
-    return (
-        <div>
-            <nav>
-                <p className="headername">Sathish's Public Blog</p>
-                <div className="toggle-button" onClick={toggleNavbar}>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div className={`nav-comp ${isNavOpen ? 'active' : ''}`}>
-                    <a href="/" className="nav-element">HOME</a>
-                    <a href="/about" className="nav-element">ABOUT US</a>
-                    <a href="/contact" className="nav-element">CONTACT</a>
-                    <a href="/compose" className="nav-element">COMPOSE</a>
-                    {user ?
-                        <div className="navbar-username">
-                            {user.name}
-                            <img src="/prof.png" alt="" className="profile-pic" />
-                            <button className="logout-btn" onClick={handleLogout}>Logout</button>
-                        </div>
-                        :
-                        <div className="login">
-                            <a href="/login" className="nav-element">LOGIN</a>
-                            <a href="/register" className="nav-element">REGISTER</a>
-                        </div>}
-                </div>
-            </nav>
+  return (
+    <div>
+      <nav>
+        <p className="headername">Sathish's Public Blog</p>
+        <div className="toggle-button" onClick={toggleNavbar}>
+          <div></div><div></div><div></div>
         </div>
-    );
+        <div className={`nav-comp ${isNavOpen ? "active" : ""}`}>
+          <Link to="/" className="nav-element">HOME</Link>
+          <Link to="/about" className="nav-element">ABOUT US</Link>
+          <Link to="/contact" className="nav-element">CONTACT</Link>
+          <Link to="/compose" className="nav-element">COMPOSE</Link>
+
+          {user ? (
+            <div className="navbar-username">
+              {user.name}
+              <img src="/prof.png" alt="" className="profile-pic" />
+              <button className="logout-btn" onClick={handleLogout}>Logout</button>
+            </div>
+          ) : (
+            <div className="login">
+              <Link to="/login" className="nav-element">LOGIN</Link>
+              <Link to="/register" className="nav-element">REGISTER</Link>
+            </div>
+          )}
+        </div>
+      </nav>
+    </div>
+  );
 }
 
 export default Navbar;
